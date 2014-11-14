@@ -1,0 +1,226 @@
+package insanity;
+
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.BasicGameState;
+import org.newdawn.slick.state.StateBasedGame;
+
+import entity.Sounds;
+
+public class MainMenuState extends BasicGameState
+{
+	int stateID = -1;
+	
+	Image background = null;
+	Image title = null;
+	Image art = null;
+	
+	Image startOption = null;
+	Image scoreOption = null;
+	Image controlsOption = null;
+	Image exitOption = null;
+	
+	float startScale = 1;
+	float scoreScale = 1;
+	float controlScale = 1;
+	float exitScale = 1;
+	
+	private static int optionX = 500;
+	private static int optionY = 200;
+	
+	Sounds sounds;
+	boolean musicPlayed = false;
+	boolean hovered = false;
+
+	public MainMenuState(int stateID) 
+	{ 
+		this.stateID = stateID;
+	}
+
+	@Override
+	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException 
+	{
+		//make a damn background here!
+		//background = new Image("data/Background.png");
+		
+		/*Image menuOptions = new Image("data/images/menus/mainmenumeta.png");
+		startOption = menuOptions.getSubImage(0, 0, 500, 145);
+		scoreOption = menuOptions.getSubImage(0,145, 500, 140);
+		controlsOption = menuOptions.getSubImage(0, 285, 500, 135);
+		exitOption = menuOptions.getSubImage(0, 420, 500, 145);
+		*/
+		/* startScale = 1;
+		 scoreScale = 1;
+		 controlScale = 1;
+		 exitScale = 1;*/
+		
+		startOption = new Image("data/images/menus/starttext.png");
+		scoreOption = new Image("data/images/menus/highscoretext.png");
+		controlsOption = new Image("data/images/menus/tutorialtext.png");
+		exitOption = new Image("data/images/menus/exittext.png");
+		
+		title = new Image("data/images/menus/title.png");
+		art = new Image("data/images/menus/madscientist_lightning_blue.png");
+		sounds = new Sounds("test");
+		
+	}
+
+	float scaleStep = 0.001f;
+	@Override
+	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException 
+	{
+		if(!musicPlayed){
+			sounds.playMusic("menu");
+			musicPlayed = true;
+		}
+		Input input = gc.getInput();
+		
+		int mouseX = input.getMouseX();
+		int mouseY = input.getMouseY();
+		
+		boolean inStart = false;
+		boolean inScore = false;
+		boolean inControls = false;
+		boolean inExit = false;
+		
+		if ( (mouseX >= optionX && mouseX <= optionX + startOption.getWidth()) &&
+			 (mouseY >= optionY && mouseY <= optionY + startOption.getHeight()) ) {
+			inStart = true;
+		} else if ((mouseX >= optionX && mouseX <= optionX + scoreOption.getWidth()) &&
+					(mouseY >= optionY+140 && mouseY <= optionY+140 + scoreOption.getHeight())) {
+			inScore = true;
+		} else if ((mouseX >= optionX && mouseX <= optionX + controlsOption.getWidth()) &&
+					(mouseY >= optionY+280 && mouseY <= optionY+280 + controlsOption.getHeight())) {
+			inControls = true;
+		} else if ((mouseX >= optionX && mouseX <= optionX + exitOption.getWidth()) &&
+					(mouseY >= optionY+420 && mouseY <= optionY+420 + exitOption.getHeight())) {
+			inExit = true;
+		} else {
+			 inStart = false;
+			 inScore = false;
+			 inControls = false;
+			 inExit = false;
+		}
+		// Exit window
+		if(input.isKeyDown(Input.KEY_ESCAPE))
+		{
+			gc.exit();
+		}
+		// Move to game ///////////////// this is a bit obsolete now.....
+		/*if(input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON))
+		{
+			sbg.enterState(MainGameState.GAMEPLAYSTATE);
+		}*/
+		// if mouse is over the start text
+		if(inStart) {
+			if(!hovered){
+				sounds.menuHover();
+			}
+			if(startScale < 1.05f){
+				startScale += scaleStep * delta;
+			} 
+			if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON)){
+				//play sound
+				//fx.play();
+				sounds.stopMusic();
+				musicPlayed = false;
+				sounds.menuSelect();
+				sbg.getState(MainGameState.GAMEPLAYSTATE).init(gc, sbg);
+				gc.setMouseCursor("data/images/sprites/crosshair_small.png",0,0);
+				
+				sbg.enterState(MainGameState.GAMEPLAYSTATE);
+			}
+		} else {
+			hovered = false;
+			if(startScale > 1.0f){
+				startScale -= scaleStep * delta;				
+			}
+			
+		}
+		// if its over the high scores
+		if(inScore) {
+			if(!hovered){
+				sounds.menuHover();
+			}
+			if(scoreScale < 1.05f) {
+				scoreScale += scaleStep * delta;
+			}
+			if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+				sounds.menuSelect();
+					sbg.enterState(MainGameState.HIGHSCORESTATE); 
+			}
+		} else {
+			hovered = false;
+			if (scoreScale > 1.0f) {
+				scoreScale -= scaleStep * delta;
+			}
+		}
+		
+		// if in controls
+		if (inControls) {
+			if(!hovered){
+				sounds.menuHover();
+			}
+			if (controlScale < 1.05f) {
+				controlScale += scaleStep * delta;
+			}
+			if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+				sounds.menuSelect();
+				sbg.enterState(MainGameState.MANUALSTATE);
+			}
+		} else {
+			hovered = false;
+			if (controlScale > 1.0f) {
+				controlScale -= scaleStep * delta;
+			}
+		}
+		
+		//if in exit
+		if (inExit) {
+			if(!hovered){
+				sounds.menuHover();
+			}
+			if (exitScale < 1.05f) {
+				exitScale += scaleStep * delta;				
+			}
+			if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+				sounds.menuSelect();
+				gc.exit();
+			}
+		} else {
+			hovered = false;
+			if (exitScale > 1.0f) {
+				exitScale -= scaleStep * delta;
+			}
+		}		
+		
+	}
+	
+	@Override
+	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException 
+	{
+		
+		// Draw Background
+		//background.draw(0, 0);
+		art.draw(00,100);
+
+		title.draw(1000 - title.getWidth(),20);
+		
+		startOption.draw(optionX, optionY, startScale);
+		scoreOption.draw(optionX, optionY + 140, scoreScale);
+		controlsOption.draw(optionX, optionY + 280, controlScale);
+		exitOption.draw(optionX, optionY + 420, exitScale);
+		
+
+	}
+	
+	@Override
+	public int getID() 
+	{
+		return stateID;
+	}
+
+}

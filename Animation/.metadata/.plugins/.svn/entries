@@ -1,0 +1,73 @@
+10
+
+dir
+45
+https://groke.otago.ac.nz/360/TSAT/prototype/Animation/.metadata/.plugins
+https://groke.otago.ac.nz/360/TSAT
+
+
+
+2011-01-27T03:35:35.032815Z
+45
+ncomer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+a1f31380-18e7-475a-8def-9b81a01f2895
+
+org.eclipse.mylyn.bugzilla.core
+dir
+
+org.eclipse.team.cvs.core
+dir
+
+org.eclipse.ui.intro
+dir
+
+org.eclipse.jdt.core
+dir
+
+org.eclipse.ltk.ui.refactoring
+dir
+
+org.eclipse.mylyn.tasks.ui
+dir
+
+org.eclipse.core.runtime
+dir
+
+org.eclipse.debug.core
+dir
+
+org.eclipse.ltk.core.refactoring
+dir
+
+org.eclipse.jdt.launching
+dir
+
+org.eclipse.epp.usagedata.recording
+dir
+
+org.eclipse.jdt.ui
+dir
+
+org.eclipse.ui.workbench
+dir
+
+org.eclipse.core.resources
+dir
+
+org.eclipse.debug.ui
+dir
+

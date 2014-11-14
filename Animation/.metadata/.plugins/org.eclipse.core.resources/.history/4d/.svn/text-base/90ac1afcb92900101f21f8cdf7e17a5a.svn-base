@@ -1,0 +1,141 @@
+
+import org.newdawn.slick.Animation;
+import org.newdawn.slick.AppGameContainer;
+import org.newdawn.slick.BasicGame;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
+import org.newdawn.slick.PackedSpriteSheet;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
+
+/**
+ * Prototyping the sprite animations
+ *
+ * @author nick
+ */
+public class AnimationTest extends BasicGame {
+	/** The animation loaded */
+	private Animation animation;
+	/** The limited animation loaded */
+	private Animation limited;
+	/** The manual update animation loaded */
+	private Animation manual;
+	/** The animation loaded */
+	private Animation pingPong;
+	/** The container */
+	private GameContainer container;
+	/** Start limited counter */
+	private int start = 5000;
+	
+	/** The sheet loaded */
+	private PackedSpriteSheet packedSheet;	
+	
+	/**
+	 * Create a new image rendering test
+	 */
+	public AnimationTest() {
+		super("Animation Test");
+	}
+	
+	/**
+	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
+	 */
+	public void init(GameContainer container) throws SlickException {
+		this.container = container;
+		
+		
+		packedSheet = new PackedSpriteSheet("scientist.def", Image.FILTER_NEAREST);
+		
+		SpriteSheet sheet = packedSheet.getSpriteSheet("scientist");
+		animation = new Animation();
+		
+		
+		for (int x=0;x<3;x++) {
+			animation.addFrame(sheet.getSprite(x,0), 200);
+		}
+		
+		/*
+		//initial sprite codes stuff, renders in a horizontally flipped manner that's quite bothersome
+		SpriteSheet sheet = new SpriteSheet("data/madscientist_sheet.png", 32, 64); //(sheet location, sprite width, sprite height)
+		animation = new Animation(); //make a new animation
+		for (int i=0;i<3;i++) { //for the first 3 frames in the sheet
+			animation.addFrame(sheet.getSprite(i,0),300); //on the top row, add them to the animation var
+		}
+		limited = new Animation();
+		for (int i=0;i<3;i++) {
+			limited.addFrame(sheet.getSprite(i,1), 150);
+		}
+		limited.stopAt(2);
+		manual = new Animation(false);
+		for (int i=0;i<3;i++) {
+			manual.addFrame(sheet.getSprite(i,2), 150);
+		}
+		pingPong = new Animation(sheet, 0,0,2,0,true,150,true);
+		pingPong.setPingPong(true); //ping pong makes it so the animation goes back and forth
+		container.getGraphics().setBackground(new Color(0.4f,0.6f,0.6f));
+		//
+		 * 
+		 */
+	}
+
+	/**
+	 * @see org.newdawn.slick.BasicGame#render(org.newdawn.slick.GameContainer, org.newdawn.slick.Graphics)
+	 */
+	public void render(GameContainer container, Graphics g) {
+		g.drawString("Space to restart() animation", 100, 50);
+		g.drawString("Til Limited animation: "+start, 100, 500);
+		g.drawString("Hold 1 to move the manually animated", 100, 70);
+		g.drawString("PingPong Frame:"+pingPong.getFrame(), 600, 70);
+		
+		g.scale(-1,1);
+		animation.draw(-100,100); //top left
+		animation.draw(-200,100,36*4,65*4); //(x, y, size x, size y) //left
+		if (start < 0) {
+			//limited.draw(-400,100,36*4,65*4); //center
+		}
+		//manual.draw(-600,100,36*4,65*4); //right
+		//pingPong.draw(-700,300,36*2,65*2); //bottom right
+	}
+
+	/**
+	 * @see org.newdawn.slick.BasicGame#update(org.newdawn.slick.GameContainer, int)
+	 */
+	public void update(GameContainer container, int delta) {
+		if (container.getInput().isKeyDown(Input.KEY_1)) { //if a key is down
+			//manual.update(delta); //update the manually updating sprites
+		}
+		if (start >= 0) {
+			start -= delta;
+		}
+	} //updateNoDraw may be useful for keeping weapon and scientist in sync
+
+	/**
+	 * Entry point to our test
+	 * 
+	 * @param argv The arguments to pass into the test
+	 */
+	public static void main(String[] argv) {
+		try {
+			AppGameContainer container = new AppGameContainer(new AnimationTest());
+			container.setDisplayMode(800,600,false);
+			container.start();
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * @see org.newdawn.slick.BasicGame#keyPressed(int, char)
+	 */
+	public void keyPressed(int key, char c) {
+		if (key == Input.KEY_ESCAPE) {
+			container.exit();
+		}
+		if (key == Input.KEY_SPACE) {
+			limited.restart();
+		}
+	}
+}

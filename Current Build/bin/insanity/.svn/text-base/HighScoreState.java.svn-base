@@ -1,0 +1,190 @@
+package insanity;
+
+import java.util.ArrayList;
+
+import org.newdawn.slick.AngelCodeFont;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.BasicGameState;
+import org.newdawn.slick.state.StateBasedGame;
+
+public class HighScoreState extends BasicGameState
+{
+	int stateID = -1;
+	
+	Image background = null;
+	Image title = null;
+	Image menu = null;
+	Image exit = null;
+	Image refresh = null;
+	
+
+	float menuScale = 1;
+	float exitScale = 1;
+	float refreshScale = 1;
+	
+	private AngelCodeFont font;
+	
+	private static int optionX = 500;
+	private static int optionY = 200;
+	
+	private static int hiX = 20;
+	private static int hiY = 100;
+	private int hiCount = 1;
+	
+	private boolean gotHS = false;
+	ArrayList<HighScore> highscores = null;
+
+	
+	public HighScoreState(int stateID) 
+	{ 
+		this.stateID = stateID;
+	} 
+	
+	@Override
+	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException 
+	{
+		// TODO Auto-generated method stub
+		title = new Image("data/images/menus/highscores.png");
+		menu = new Image("data/images/menus/mainmenutext.png");
+		exit = new Image("data/images/menus/exittext.png");
+		refresh = new Image("data/images/menus/refreshtext.png");
+		font = new AngelCodeFont("data/fonts/Impact2.fnt", "data/fonts/Impact2.png");
+		
+		/*menuScale = 1;
+		exitScale = 1;
+		refreshScale = 1;*/
+
+	}
+	
+	float scaleStep = 0.001f;
+	@Override
+	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException 
+	{
+		Input input = gc.getInput();
+		
+		int mouseX = input.getMouseX();
+		int mouseY = input.getMouseY();
+		
+		
+		
+		if(!gotHS){
+			gotHS = true;
+			parseHighscores();
+		}
+		
+		if(input.isKeyDown(Input.KEY_ESCAPE))
+		{
+			gc.exit();
+		}
+		
+		boolean inMenu = false;
+		boolean inExit = false;
+		boolean inRefresh = false;
+
+		//decide whether the mouse is over an option
+		if (( mouseX >= optionX+220 && mouseX <= optionX+220 + refresh.getWidth()) &&
+				(mouseY >= optionY+140 && mouseY <= optionY+140 + refresh.getHeight())) {
+			inRefresh = true;
+		}
+		if ( (mouseX >= optionX && mouseX <= optionX + menu.getWidth()) &&
+				 (mouseY >= optionY+280 && mouseY <= optionY+280 + menu.getHeight()) ) {
+			inMenu = true;
+		} 
+		if (( mouseX >= optionX && mouseX <= optionX + exit.getWidth()) &&
+				(mouseY >= optionY+420 && mouseY <= optionY + 420 +exit.getHeight())) {
+			inExit = true;
+		}
+		
+		//deal with mouseovers and clicks
+		if(inRefresh) {
+			if(refreshScale < 1.05f) {
+				refreshScale += scaleStep * delta;				
+			}
+			if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+				//code for refreshing highscores...
+				parseHighscores();
+			
+			}
+		} else {
+			if(refreshScale > 1.0f) {
+				refreshScale -= scaleStep * delta;
+			}
+		}
+		if(inMenu) {
+			if(menuScale < 1.05f){
+				menuScale += scaleStep * delta;
+			} 
+			if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON)){			
+				sbg.enterState(MainGameState.MAINMENUSTATE);
+			}
+		} else {
+			if(menuScale > 1.0f){
+				menuScale -= scaleStep * delta;				
+			}
+			
+		}
+	
+		if(inExit) {
+			if(exitScale < 1.05f){
+				exitScale += scaleStep * delta;
+			} 
+			if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON)){
+				gc.exit();
+			}
+		} else {
+			if(exitScale > 1.0f){
+				exitScale -= scaleStep * delta;				
+			}
+			
+		}
+		
+	}
+	
+	@Override
+	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException 
+	{
+		// TODO Auto-generated method stub
+		title.draw(1000- title.getWidth(),20);
+		refresh.draw(optionX+220, optionY+140, refreshScale);
+		menu.draw(optionX, optionY+280, menuScale);
+		exit.draw(optionX, optionY+420, exitScale);
+		if(highscores != null){
+			for(HighScore hs : highscores){
+				font.drawString(hiX, hiY+50*hiCount, hs.getKey()+"", Color.red);
+				font.drawString(hiX+50, hiY+50*hiCount, hs.getPlayer(), Color.red);
+				font.drawString(hiX+300, hiY+50*hiCount, hs.getScore()+"", Color.red);
+				hiCount++;
+				/*System.out.println(hs.getKey());
+				System.out.println(hs.getPlayer());
+				System.out.println(hs.getScore());*/
+				
+			}
+			hiCount = 1;
+			font.drawString(hiX, 650, "Check out high scores at:", Color.red);
+			font.drawString(hiX, 690, "insanitywithouthumanity.appspot.com", Color.red);
+		} else {
+			System.out.println("Parsing error");
+		}
+	
+
+		
+	}
+	
+	private void parseHighscores(){
+		Highscores hsm = new Highscores();
+		highscores = hsm.getScores();	
+		//System.err.println("Scores parsed");
+	}
+	
+	@Override
+	public int getID() 
+	{
+		return stateID;
+	}
+
+}

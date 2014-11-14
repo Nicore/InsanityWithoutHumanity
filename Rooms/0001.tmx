@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="32" height="24" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="tilesheet" tilewidth="32" tileheight="32">
+  <image source="../Art/Tiles/tilesheet.png"/>
+  <tile id="0">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="7">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="8">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="9">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="10">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="11">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="12">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="13">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="14">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="15">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="16">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="17">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="18">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="19">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="20">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="21">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="22">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="23">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="24">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="25">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="26">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="27">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="30">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="31">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="32">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="33">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="34">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="35">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="36">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="37">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="38">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="41">
+   <properties>
+    <property name="damaging" value="1"/>
+    <property name="damaging" value="1"/>
+   </properties>
+  </tile>
+  <tile id="42">
+   <properties>
+    <property name="damaging" value="1"/>
+    <property name="damaging" value="1"/>
+   </properties>
+  </tile>
+  <tile id="43">
+   <properties>
+    <property name="damaging" value="1"/>
+    <property name="damaging" value="1"/>
+   </properties>
+  </tile>
+  <tile id="49">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="52">
+   <properties>
+    <property name="damaging" value="1"/>
+    <property name="damaging" value="1"/>
+   </properties>
+  </tile>
+  <tile id="53">
+   <properties>
+    <property name="damaging" value="1"/>
+    <property name="damaging" value="1"/>
+   </properties>
+  </tile>
+  <tile id="54">
+   <properties>
+    <property name="damaging" value="1"/>
+    <property name="damaging" value="1"/>
+   </properties>
+  </tile>
+  <tile id="63">
+   <properties>
+    <property name="damaging" value="1"/>
+    <property name="damaging" value="1"/>
+   </properties>
+  </tile>
+  <tile id="64">
+   <properties>
+    <property name="damaging" value="1"/>
+    <property name="damaging" value="1"/>
+   </properties>
+  </tile>
+  <tile id="65">
+   <properties>
+    <property name="damaging" value="1"/>
+    <property name="damaging" value="1"/>
+   </properties>
+  </tile>
+  <tile id="67">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="74">
+   <properties>
+    <property name="damaging" value=""/>
+    <property name="damaging" value=""/>
+   </properties>
+  </tile>
+  <tile id="75">
+   <properties>
+    <property name="damaging" value=""/>
+    <property name="damaging" value=""/>
+   </properties>
+  </tile>
+  <tile id="76">
+   <properties>
+    <property name="damaging" value=""/>
+    <property name="damaging" value=""/>
+   </properties>
+  </tile>
+  <tile id="77">
+   <properties>
+    <property name="damaging" value="1"/>
+    <property name="damaging" value="1"/>
+   </properties>
+  </tile>
+  <tile id="78">
+   <properties>
+    <property name="damaging" value="1"/>
+    <property name="damaging" value="1"/>
+   </properties>
+  </tile>
+  <tile id="79">
+   <properties>
+    <property name="damaging" value="1"/>
+    <property name="damaging" value="1"/>
+   </properties>
+  </tile>
+  <tile id="80">
+   <properties>
+    <property name="damaging" value="1"/>
+    <property name="damaging" value="1"/>
+   </properties>
+  </tile>
+  <tile id="81">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="83">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="84">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="85">
+   <properties>
+    <property name="damaging" value="1"/>
+    <property name="damaging" value="1"/>
+   </properties>
+  </tile>
+  <tile id="86">
+   <properties>
+    <property name="damaging" value="1"/>
+    <property name="damaging" value="1"/>
+   </properties>
+  </tile>
+  <tile id="87">
+   <properties>
+    <property name="damaging" value="1"/>
+    <property name="damaging" value="1"/>
+   </properties>
+  </tile>
+  <tile id="88">
+   <properties>
+    <property name="damaging" value="1"/>
+    <property name="damaging" value="1"/>
+   </properties>
+  </tile>
+  <tile id="89">
+   <properties>
+    <property name="damaging" value="1"/>
+    <property name="damaging" value="1"/>
+   </properties>
+  </tile>
+  <tile id="90">
+   <properties>
+    <property name="damaging" value="1"/>
+    <property name="damaging" value="1"/>
+   </properties>
+  </tile>
+  <tile id="91">
+   <properties>
+    <property name="damaging" value="1"/>
+    <property name="damaging" value="1"/>
+   </properties>
+  </tile>
+  <tile id="92">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="93">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="94">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="95">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="96">
+   <properties>
+    <property name="damaging" value="1"/>
+    <property name="damaging" value="1"/>
+   </properties>
+  </tile>
+  <tile id="97">
+   <properties>
+    <property name="damaging" value="1"/>
+    <property name="damaging" value="1"/>
+   </properties>
+  </tile>
+  <tile id="98">
+   <properties>
+    <property name="damaging" value="1"/>
+    <property name="damaging" value="1"/>
+   </properties>
+  </tile>
+  <tile id="99">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="100">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="104">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="105">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="106">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="110">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="111">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="113">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="114">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="115">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="116">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="117">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="121">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="124">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="125">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="126">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="127">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="128">
+   <properties>
+    <property name="impassable" value="1"/>
+    <property name="impassable" value="1"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Tile Layer 1" width="32" height="24">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC63WN08DMRgG4JNgofceIIAQMBAGJiYWNogEA0UCiQ4ChkS0AQkIA3WiTtSJOlEn6j/j/RRbsiyXnJPh0TX7Xp/tO1+Z53nZkAMRti+qUJzLFuqIx3J9Xd0IUw6F0MqswSIsCecSFYVhCFvKdbEcki/lk2VYdcgfh74E28Dp8ksd8nkbJmAyBfmzEII5yIQFH+3gdebZlstKIL8YRoU6Y7Dis09qIQgxhvb7FeNaAAHhmJ53k5UPSvfYYtddxmXGU8+rKsXz83aEhH3dfPfzrqjmFT1/k6WenF/NtjQ/1mEDpmAaahzy0x36cxt2YBf2YB8ODOWjQlvl+ecynodwBMdwAqdwZuk71Tjy/HaFTkP+OVzAJVzBNdxo8kmb5j6u+bdwB/fwAI/wpCnL81VtcO3/Z3iBV3iDd/gwlNe1gfLTHPI/4Qu+4Qd+4c+Sr+t/1ftv0my41mLIF78pyeQnQ5UfkM5lePF1Q1w7aF9eO1JB9f2l9afEi685HB27/BPo8O+lqv/l9YfEoM4ytqa8buhhwpZ813HVtYGyR2AQer34v4mYX5REnu37SgZYNhmCjhTk+8H/yfh/mZxfD7kGlZbrJA8a2dZP3Qb4B9PrYOsADAAA
+  </data>
+ </layer>
+</map>

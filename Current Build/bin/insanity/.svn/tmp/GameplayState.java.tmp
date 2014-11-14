@@ -1,0 +1,848 @@
+package insanity; 
+
+import java.util.ArrayList;
+import java.util.Random;
+
+import org.newdawn.slick.AngelCodeFont;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.GameContainer; 
+import org.newdawn.slick.Graphics; 
+import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
+import org.newdawn.slick.SlickException; 
+import org.newdawn.slick.state.BasicGameState;
+import org.newdawn.slick.state.StateBasedGame;
+
+import entity.*;
+
+public class GameplayState extends BasicGameState 
+{
+	int stateID = -1;
+	float deltaTime;
+	HUD hud = new HUD();
+	
+	// The images we'll be using
+	Image background = null;
+	private AngelCodeFont font;
+	MapLoader mapLoader = null;
+	
+	// Player Entity
+	Player player = null;
+	double playerRotation = 0;
+	float playerCooldown = 1;
+	int weaponSelection = 0;
+	boolean shredderAq = false;
+	boolean lightningAq = true;
+	boolean flamethrowerAq = false;
+	
+	//Map
+	InsanityMap playerRoom;
+	int room = 15;
+	boolean roomChanged = false;
+	boolean makeDoors = false;
+	boolean doorN = false;
+	boolean doorS = false;
+	boolean doorE = false;
+	boolean doorW = false;
+	
+	// Bullet and Enemy, Door Arrays
+	ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+	ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+	ArrayList<Door> doors = new ArrayList<Door>();
+	ArrayList<Laser> lasers = new ArrayList<Laser>();
+	ArrayList<LightningGun> LGuns = new ArrayList<LightningGun>();
+	ArrayList<FlameThrower> flamethrower = new ArrayList<FlameThrower>();
+	
+	float flameCounter = 30f;
+	
+	public GameplayState(int stateID) 
+	{ 
+		this.stateID = stateID;
+	} 
+	
+	@Override 
+	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException 
+	{
+		// Make rooms and load first room
+		mapLoader = new MapLoader();
+		playerRoom = mapLoader.map.get(room).room;
+		mapLoader.map.get(room).beenTo = true;
+		font = new AngelCodeFont("data/fonts/GoudyStout.fnt", "data/fonts/GoudyStout_0.png");
+
+		// Create player
+		player = new Player("data/images/sprites/madscientist_spritesheet.png", 450, 100);
+		
+		// Load enemies
+		spawnEnemies();
+		
+		//Make doors
+		if(mapLoader.map.get(room).doorN){
+			
+			doors.add(0, new Door("data/images/sprites/door_horiz.png", 448, 0, 12));
+			doorN = true;
+		}
+		else {
+			doors.add(0, new Door("data/images/sprites/door_horiz.png", -448, -12, 12));
+		}
+		doors.add(1, new Door("data/images/sprites/door_horiz.png", -448, -12, 12));
+		doors.add(2, new Door("data/images/sprites/door_horiz.png", -448, -12, 12));
+		if(mapLoader.map.get(room).doorW){
+			doors.add(3, new Door("data/images/sprites/door_vert.png", 0, 320, 9));
+			doorW = true;
+		}
+		else {
+			doors.add(3, new Door("data/images/sprites/door_horiz.png", -448, -12, 12));
+		}
+		
+		hud.init();
+		
+	} 
+	
+	public void reset() throws SlickException{
+		System.out.println("Final Score: " + player.getScore());
+		room = 15;
+		playerRoom = mapLoader.map.get(room).room;
+		player = new Player("data/images/sprites/madscientist_spritesheet.png", 450, 100);
+		
+		// Load enemies
+		spawnEnemies();
+		
+		roomChanged = true;
+		makeDoors = true;
+		
+		for(Room r : mapLoader.map)
+		{
+			if(r.beenTo && r.number != 15){
+				r.respawn = true;
+			}
+		}
+		weaponSelection = 0;
+		bullets = new ArrayList<Bullet>();
+		lasers = new ArrayList<Laser>();
+		LGuns = new ArrayList<LightningGun>();
+	}
+	
+	@Override 
+	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException 
+	{	
+		deltaTime = delta / 1000f;
+		playerCooldown += deltaTime;
+		
+		boolean goUp = true;
+		boolean goDown = true;
+		boolean goLeft = true;
+		boolean goRight = true;
+		Input input = gc.getInput();
+
+		// Exit window
+		if(input.isKeyDown(Input.KEY_ESCAPE))
+		{
+			gc.exit();
+		}
+		if(input.isKeyDown(Input.KEY_0))
+		{
+			enemies = new ArrayList<Enemy>();
+			lasers = new ArrayList<Laser>();
+		}
+		
+		//Doors
+		//If all enemies are dead
+		if(enemies.isEmpty()){
+			for(Door d: doors){
+				d.update(gc, deltaTime);
+			}
+		}
+		
+		// Check if going through door
+		if(player.getX() <= 25){
+			playerRoom = mapLoader.map.get(room = mapLoader.map.get(room).neighbourW).room;
+			if(!mapLoader.map.get(room).beenTo || mapLoader.map.get(room).respawn)
+			{
+			mapLoader.map.get(room).respawn = false;
+			// Load enemies
+			spawnEnemies();
+			makeDoors = true;
+			}
+			mapLoader.map.get(room).beenTo = true;
+			roomChanged = true;
+			player.posX = MainGameState.SCREENWIDTH - 51;
+		}
+		if(player.getX() >= MainGameState.SCREENWIDTH - 25){
+			playerRoom = mapLoader.map.get(room = mapLoader.map.get(room).neighbourE).room;
+			if(!mapLoader.map.get(room).beenTo || mapLoader.map.get(room).respawn)
+			{
+			mapLoader.map.get(room).respawn = false;
+			// Load enemies
+			spawnEnemies();
+			makeDoors = true;
+			}
+			mapLoader.map.get(room).beenTo = true;
+			roomChanged = true;
+			player.posX = 51;
+		}
+		if(player.getY() <= 25){
+			playerRoom = mapLoader.map.get(room = mapLoader.map.get(room).neighbourN).room;
+			if(!mapLoader.map.get(room).beenTo || mapLoader.map.get(room).respawn)
+			{
+			mapLoader.map.get(room).respawn = false;
+			// Load enemies
+			spawnEnemies();
+			makeDoors = true;
+			}
+			mapLoader.map.get(room).beenTo = true;
+			roomChanged = true;
+			player.posY = MainGameState.SCREENHEIGHT - 51;
+		}
+		if(player.getY() >= MainGameState.SCREENHEIGHT - 50){
+			playerRoom = mapLoader.map.get(room = mapLoader.map.get(room).neighbourS).room;
+			if(!mapLoader.map.get(room).beenTo || mapLoader.map.get(room).respawn)
+			{
+			mapLoader.map.get(room).respawn = false;
+			// Load enemies
+			spawnEnemies();
+			makeDoors = true;
+			}
+			mapLoader.map.get(room).beenTo = true;
+			roomChanged = true;
+			player.posY = 51;	
+		}
+		
+		//If player has entered a new room.
+		if(roomChanged && makeDoors){
+			doors = new ArrayList<Door>();
+			roomChanged = false;
+			makeDoors = false;
+			doorN = false;
+			doorE = false;
+			doorS = false;
+			doorW = false;
+			if(mapLoader.map.get(room).beenTo){
+				if(mapLoader.map.get(room).doorN){		
+					doors.add(0, new Door("data/images/sprites/door_horiz.png", 448, 0, 12));
+					doorN = true;
+				} 
+				else {
+					doors.add(0, new Door("data/images/sprites/door_horiz.png", -448, -12, 12));
+				}
+
+				if(mapLoader.map.get(room).doorS){
+					doors.add(1, new Door("data/images/sprites/door_horiz.png", 448, 736, 6));
+					doorS = true;
+
+				}
+				else {
+					doors.add(1, new Door("data/images/sprites/door_horiz.png", -448, -12, 12));
+				}
+
+				if(mapLoader.map.get(room).doorE){
+					doors.add(2, new Door("data/images/sprites/door_vert.png", 992, 320, 3));
+					doorE = true;
+				}
+				else {
+					doors.add(2, new Door("data/images/sprites/door_horiz.png", -448, -12, 12));
+				}
+
+				if(mapLoader.map.get(room).doorW){
+					doors.add(3, new Door("data/images/sprites/door_vert.png", 0, 320, 9));
+					doorW = true;
+				}
+				else {
+					doors.add(3, new Door("data/images/sprites/door_horiz.png", -448, -12, 12));
+				}
+			}
+		 }
+		
+		if(weaponSelection == 2){
+			if(input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)){
+				float projection = (float) Math.atan2((input.getMouseY() - player.getY()),(input.getMouseX() - player.getX()));
+				if(LGuns.size() <= 0){
+					LGuns.add(new LightningGun(player.getX(), player.getY(), projection, player));
+				}
+				goUp = false;
+				goDown = false;
+				goLeft = false;
+				goRight = false;
+			}
+		}
+		if(!input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)){
+			LGuns = new ArrayList<LightningGun>();
+			for(Enemy e: enemies){
+				e.setBouncingLightning(false);
+			}
+		}
+		
+		// switch weapon
+		if(input.isKeyPressed(Input.KEY_E))
+		{	
+			LGuns = new ArrayList<LightningGun>();
+			weaponSelection = (weaponSelection + 1) % 4;
+			boolean selected = false;
+			while(!selected){
+				if(weaponSelection == 0){
+					//bullet
+					player.changeWeapon("data/images/sprites/basic_weapon.png");
+					selected = true;
+				} else if(weaponSelection == 1){
+					//shredder
+					if(shredderAq){
+						player.changeWeapon("data/images/sprites/shredder_weapon.png");
+						selected = true;
+					} else {
+						weaponSelection = (weaponSelection + 1) % 4;
+					}
+				} else if(weaponSelection == 2){
+					//lightning
+					if(lightningAq){
+						player.changeWeapon("data/images/sprites/lightning_weapon.png");
+						selected = true;
+					} else {
+						weaponSelection = (weaponSelection + 1) % 4;
+					}
+				} else if(weaponSelection == 3){
+					//flamethrower
+					if(flamethrowerAq){
+						player.changeWeapon("data/images/sprites/fire_weapon.png");
+						selected = true;
+					} else {
+						weaponSelection = (weaponSelection + 1) % 4;
+					}
+				}
+			}
+		}
+			
+		if(input.isKeyPressed(Input.KEY_Q))
+		{	
+			LGuns = new ArrayList<LightningGun>();
+			weaponSelection = (weaponSelection + 3) % 4;
+			boolean selected = false;
+			while(!selected){
+				if(weaponSelection == 0){
+					//bullet
+					player.changeWeapon("data/images/sprites/basic_weapon.png");
+					selected = true;
+				} else if(weaponSelection == 1){
+					//shredder
+					if(shredderAq){
+						player.changeWeapon("data/images/sprites/shredder_weapon.png");
+						selected = true;
+					} else {
+						weaponSelection = (weaponSelection + 3) % 4;
+					}
+				} else if(weaponSelection == 2){
+					//lightning
+					if(lightningAq){
+						player.changeWeapon("data/images/sprites/lightning_weapon.png");
+						selected = true;
+					} else {
+						weaponSelection = (weaponSelection + 3) % 4;
+					}
+				} else if(weaponSelection == 3){
+					//flamethrower
+					if(flamethrowerAq){
+						player.changeWeapon("data/images/sprites/fire_weapon.png");
+						selected = true;
+					} else {
+						weaponSelection = (weaponSelection + 3) % 4;
+					}
+				}
+			}
+		}
+		
+		// fire weapon
+		if(input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON))
+		{
+			if(weaponSelection == 0){
+				//bullet
+				if(playerCooldown >= 0.25){
+					// Calculate projectile projection
+					float projection = (float) Math.atan2((input.getMouseY() - player.getY()),(input.getMouseX() - player.getX()));
+					bullets.add(new Bullet("data/images/sprites/bullet.png" ,player.getX(), player.getY(), projection, "Player"));
+					playerCooldown = 0;
+				}
+			} else if(weaponSelection == 1){
+				//shredder
+				if(playerCooldown >= 0.25){
+					// Calculate projectile projection
+					float projection = (float) Math.atan2((input.getMouseY() - player.getY()),(input.getMouseX() - player.getX()));
+					bullets.add(new ShredderBullet(player.getX(), player.getY(), projection, "Player"));
+					playerCooldown = 0;
+				}
+			} else if(weaponSelection == 3){
+				//flamethrower
+				if(playerCooldown >= 0.005){
+					// Calculate projectile projection
+					float projection = (float) Math.atan2((input.getMouseY() - player.getY()),(input.getMouseX() - player.getX()));
+					bullets.add(new FlameThrower(player.getX(), player.getY(), projection));
+					playerCooldown = 0;
+				}
+			}
+		}
+//		
+//		if(!input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)){
+//			flamethrower = new ArrayList<FlameThrower>();
+//		}
+		
+		if(!input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)){
+			flamethrower = new ArrayList<FlameThrower>();
+		}
+		
+		//LightningGun
+		//for(LightningGun l: LGuns){
+		for(int i = 0; i < LGuns.size(); i++){
+			if(LGuns.get(i).getShotBy() instanceof Enemy){
+				LGuns.get(i).update(gc, deltaTime, ((Enemy) LGuns.get(i).getShotBy()).getX(), ((Enemy)LGuns.get(i).getShotBy()).getY());
+			}
+			else{
+				LGuns.get(i).update(gc, deltaTime);
+			}
+			for(Enemy e: enemies){
+				if(!Collision.checkLightning(LGuns.get(i), e)){
+					LGuns.get(i).setX(e.getX(), e.getY());
+					if(e instanceof Robot){
+						((Robot)e).wasHit(LGuns.get(i), player, lasers);
+					}
+					else{
+						e.wasHit(LGuns.get(i), player);
+					}
+					if(!e.getBouncingLightning()){
+						for(Enemy j: enemies){
+							if(e != j && Math.abs(j.getX() - e.getX()) <= 230 && Math.abs(j.getY() - e.getY()) <= 230){
+								if(input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)){
+									float projection = (float) Math.atan2((j.getY() - e.getY()),(j.getX() - e.getX()));
+									LGuns.add(new LightningGun(e.getX(), e.getY(), projection, e));
+									e.setBouncingLightning(true);
+								}
+							}
+						}
+					}
+					if (e.isDead)
+					{
+						// Remove the enemy
+						LGuns.remove(i);
+						i--;
+						enemies.remove(e);
+					}
+					break;
+				}
+			}
+		}
+		
+		//Updating Lasers if there are any
+		for(Laser l : lasers){
+			l.update(gc, deltaTime);
+			if(!Collision.checkLaser(l, player)){
+				player.wasHit();
+			}
+		}
+	
+		for(FlameThrower f: flamethrower){
+			f.update(gc, deltaTime);
+		}
+
+ 
+		// Update Bullets
+		for (Bullet b : bullets)
+		{
+			b.update(gc, deltaTime);
+		}
+
+		// Check for bleeding - bullets
+		for (int i = 0; i < bullets.size(); ++i)
+		{
+			//Bullet Collision with environment
+			Bullet b = bullets.get(i);
+			if(b.getX() <= 0 || b.getX() >= MainGameState.SCREENWIDTH - 12 || b.getY() <= 0 || b.getY() >= MainGameState.SCREENHEIGHT - 12){
+				bullets.remove(i);
+				--i;
+				continue;
+			}
+			if(!Collision.checkEnviroment(b, b.getDirectionX(), playerRoom)){
+				bullets.remove(i);
+				--i;
+				continue;
+			}
+			else if(!Collision.checkEnviroment(b, b.getDirectionY(), playerRoom)){
+				bullets.remove(i);
+				--i;
+				continue;
+			}
+			if(b instanceof FlameThrower){
+				if(((FlameThrower)b).getExpired() < 0){
+					bullets.remove(i);
+					i--;
+					break;
+				}
+			}
+			for(Door d: doors){
+				if(Collision.checkBullet(b, d)){
+					bullets.remove(i);
+					i--;
+					break;
+				}
+			}
+			if(b.getShotBy() != "Player"){
+				if(Collision.checkBullet(b, player)){
+					player.wasHit();
+					bullets.remove(i);
+					i--;
+				}
+				if(player.isDead){
+					break;
+				}
+			}
+	
+			for (int j = 0; j < enemies.size(); ++j)
+			{
+				Enemy e = enemies.get(j);
+
+				if (Collision.checkBullet(b, e))
+				{
+					if(b.getShotBy() != "Enemy"){
+						if(b instanceof ShredderBullet){
+							if(e != ((ShredderBullet)b).getHits(1) && e != ((ShredderBullet)b).getHits(2) && e != ((ShredderBullet)b).getHits(3))
+								if(e instanceof Robot){
+									((Robot)e).wasHit(b, player, lasers);
+								}
+								else{
+									e.wasHit(b, player);
+								}
+							((ShredderBullet) b).iHit(e);
+						}
+						else if(b instanceof FlameThrower){
+							if(flameCounter < 0){
+								if(e instanceof Robot){
+									((Robot)e).wasHit(b, player, lasers);
+								}
+								else{
+									e.wasHit(b, player);
+								}
+								flameCounter = 30f;
+							}
+							else {
+								flameCounter -= deltaTime * 1000;
+							}
+						}
+						else {
+							if(e instanceof Robot){
+								((Robot)e).wasHit(b, player, lasers);
+							}
+							else{
+								e.wasHit(b, player);
+							}
+						}
+						// Remove the bullet
+						if(!(b instanceof ShredderBullet)){
+							bullets.remove(i);
+							--i;
+						}
+						else if(((ShredderBullet)b).getExpired()){
+							bullets.remove(i);
+							i--;
+						}
+						// If the Enemy is dead
+						if (e.isDead)
+						{
+							// Remove the enemy
+							enemies.remove(j);
+							--j;
+						}
+						break;
+					}
+				}
+			}
+		}
+
+		//Update Enemies
+		//System.out.println("Updating enemies");
+		for(Enemy e: enemies){
+			if(e instanceof Troll){
+				((Troll) e).update(gc, deltaTime, player.getX(), player.getY(), enemies, playerRoom, bullets);
+			}
+			else if(e instanceof Zombie){
+				if(((Zombie)e).inAttackRange(player.getX(), player.getY())){
+					player.wasHit();
+				}
+				((Zombie)e).update(gc, deltaTime, player.getX(), player.getY(), enemies, playerRoom);
+			}
+			else if(e instanceof Robot){
+				((Robot) e).update(gc, deltaTime, player.getX(), player.getY(), enemies, playerRoom, lasers);
+			}
+			else if(e instanceof Vampire){
+				if(((Vampire)e).inAttackRange(player.getX(), player.getY())){
+					((Vampire)e).iHit();
+					player.wasHit();
+					player.wasHit();
+				}
+				((Vampire)e).update(gc, deltaTime, player.getX(), player.getY(), enemies, playerRoom);
+			}
+			else if(e instanceof ZombieTroll){
+				if(((ZombieTroll)e).inAttackRange(player.getX(), player.getY())){
+					player.wasHit();
+					player.wasHit();
+					player.wasHit();
+				}
+				((ZombieTroll)e).update(gc, deltaTime, player.getX(), player.getY(), enemies, playerRoom);
+			}
+			else{
+				
+			}
+		}
+
+		// Player control
+
+		if(input.isKeyDown(Input.KEY_W))
+		{	
+			if(!Collision.checkEnviroment(player, 12, playerRoom, deltaTime)){
+				goUp = false;
+			}
+			if(doorN){
+				if(!Collision.checkDoor(player, doors.get(0), 12)){
+					goUp = false;
+				}
+			}
+			if(goUp){
+				for(Enemy e: enemies){
+					if(Collision.check(player, e, 12, deltaTime)){
+
+					}
+					else {
+						return;
+					}
+				}
+
+				player.moveY(-1, deltaTime);
+			}
+			
+
+		}
+		if(input.isKeyDown(Input.KEY_S))
+		{
+			if(!Collision.checkEnviroment(player, 6, playerRoom, deltaTime)){
+				goDown = false;
+			}
+			if(doorS){
+				if(!Collision.checkDoor(player, doors.get(1), 6)){
+					goDown = false;
+				}
+			}
+			if(goDown){
+				for(Enemy e: enemies){
+					if(Collision.check(player, e, 6, deltaTime)){
+
+					}
+					else {
+						return;
+					}
+				}
+				player.moveY(1, deltaTime);
+			}
+			
+		}
+		if(input.isKeyDown(Input.KEY_A))
+		{
+			if(!Collision.checkEnviroment(player, 9, playerRoom, deltaTime)){
+				goLeft = false;
+			}
+			if(doorW){
+				if(!Collision.checkDoor(player, doors.get(3), 9)){
+					goLeft = false;
+				}
+			}
+			if(goLeft){
+				for(Enemy e: enemies){
+					if(Collision.check(player, e, 9, deltaTime)){
+
+					}
+					else {
+						return;
+					}
+				}
+				player.moveX(-1, deltaTime);
+			}
+			
+		}
+		if(input.isKeyDown(Input.KEY_D))
+		{
+			if(!Collision.checkEnviroment(player, 3, playerRoom, deltaTime)){
+				goRight = false;
+			}
+			if(doorE){
+				if(!Collision.checkDoor(player, doors.get(2), 3)){
+					goRight = false;
+				}
+			}
+			if(goRight){
+				for(Enemy e: enemies){
+					if(Collision.check(player, e, 3, deltaTime)){
+
+					}
+					else {
+						return;
+					}
+				}
+				player.moveX(1, deltaTime);
+			}
+			
+		}
+
+		// Update player
+		if(player.isDead){
+			System.out.println("You are dead");
+			reset();
+			//////go to defeatstate////////////////////////////////////////////////////////////////////////////////////////////////////
+			sbg.enterState(MainGameState.DEFEATSTATE);
+			
+		}
+		player.update(gc, deltaTime, weaponSelection);
+
+	} 
+	
+	@Override 
+	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException 
+	{
+		// Draw background
+		//background.draw(0.0f, 0.0f);
+		playerRoom.render(0, 0);
+		
+		//Draw doors
+		for(Door d: doors){
+			d.render();
+		}
+		
+		// Render minimap
+		if(enemies.isEmpty()){
+			for(Room r : mapLoader.map)
+			{
+				r.render(room);
+			}
+		}
+		
+		// Render Bullets
+		for(FlameThrower f: flamethrower){
+			f.render();
+		}
+    	for (Bullet b : bullets)
+    	{
+    		b.render();
+    	}
+    	for(Laser l : lasers){
+    		l.render();
+    	}
+    	for(LightningGun l: LGuns){
+    		l.render();
+    	}
+    	
+    	// Draw player
+		player.render(gc);
+		
+    	// Render Enemies
+    	for (Enemy e : enemies)
+    	{
+    		e.render();
+    	}
+    	
+    	// Render HUD
+    	hud.render(weaponSelection, shredderAq, lightningAq, flamethrowerAq);
+    	font.drawString(750, 0, "Score: " + player.getScore(), Color.black);
+	}
+
+	public ArrayList<Enemy> getEnemies(){
+		return enemies;
+	}
+	
+	public Player getPlayer(){
+		return player;
+	}
+	
+	private void spawnEnemies() throws SlickException{
+		Random generator = new Random();
+		
+		// Add enemies
+		enemies = new ArrayList<Enemy>();
+		int roomDifficulty = mapLoader.map.get(room).difficulty;
+		int enemyType = 0;
+		for(int i = 0; i < roomDifficulty; i++)
+		{
+			// Spawn enemy
+			if(roomDifficulty >= 6){
+				enemyType = generator.nextInt(6);
+			} else if(roomDifficulty >= 5){
+				enemyType = generator.nextInt(5);
+			} else if(roomDifficulty >= 4){
+				enemyType = generator.nextInt(4);
+			} else if(roomDifficulty >= 3){
+				enemyType = generator.nextInt(3);
+			} else {
+				enemyType = generator.nextInt(2);
+			}
+			
+			int enemyX = generator.nextInt(MainGameState.SCREENWIDTH-64)+32;
+			int enemyY = generator.nextInt(MainGameState.SCREENHEIGHT-64)+32;
+			if(enemyType == 0){
+			enemies.add(new Zombie("data/images/sprites/zombiesheet.png", enemyX, enemyY));
+			} else if(enemyType == 1) {
+			enemies.add(new Troll("data/images/sprites/trollsheetblue.png", enemyX, enemyY));
+			} else if(enemyType == 2) {
+			enemies.add(new ZombieTroll("data/images/sprites/trollsheetzombie.png", enemyX, enemyY));
+			} else if (enemyType == 3) {
+			enemies.add(new Robot("data/images/sprites/madscientist_spritesheet.png", enemyX, enemyY));
+			} else if(enemyType == 4) {
+			enemies.add(new Vampire("data/images/sprites/trollsheetpink.png", enemyX, enemyY));
+			} else if(enemyType == 5) {
+			enemies.add(new FireZombie("data/images/sprites/zombiesheetfire.png", enemyX, enemyY));
+			}
+			
+			// Check enemy didn't spawn on environment
+			if(!Collision.checkEnviroment(enemies.get(i), 12, playerRoom, deltaTime)){
+				enemies.remove(i);
+				i--;
+			} else if(!Collision.checkEnviroment(enemies.get(i), 3, playerRoom, deltaTime)){
+				enemies.remove(i);
+				i--;
+			} else if(!Collision.checkEnviroment(enemies.get(i), 6, playerRoom, deltaTime)){
+				enemies.remove(i);
+				i--;
+			} else if(!Collision.checkEnviroment(enemies.get(i), 9, playerRoom, deltaTime)){
+				enemies.remove(i);
+				i--;
+			}
+			
+			// Check enemy didn't spawn on other enemy
+			for(int j = 0; j < enemies.size()-2; j++)
+			{
+				if(!Collision.check(enemies.get(j), enemies.get(i), 12)){
+					enemies.remove(i);
+					i--;
+				} else if(!Collision.check(enemies.get(j), enemies.get(i), 3)){
+					enemies.remove(i);
+					i--;
+				} else if(!Collision.check(enemies.get(j), enemies.get(i), 6)){
+					enemies.remove(i);
+					i--;
+				} else if(!Collision.check(enemies.get(j), enemies.get(i), 9)){
+					enemies.remove(i);
+					i--;
+				}
+			}
+		}
+		
+//		enemies.add(new Vampire("data/images/sprites/trollsheetpink.png",350,450));
+		
+//		enemies.add(new ZombieTroll("data/images/sprites/madscientist_spritesheet.png", 350, 450));
+//		enemies.add(new Troll("data/images/sprites/madscientist_spritesheet.png", 100, 100));
+//		enemies.add(new Zombie("data/images/sprites/madscientist_spritesheet.png", 350, 450));
+//		enemies.add(new Zombie("data/images/sprites/madscientist_spritesheet.png", 250, 200));
+//		enemies.add(new Zombie("data/images/sprites/madscientist_spritesheet.png", 400, 700));
+//		enemies.add(new Zombie("data/images/sprites/madscientist_spritesheet.png", 480, 500));
+//		enemies.add(new Troll("data/images/sprites/madscientist_spritesheet.png", 570, 610));
+//		enemies.add(new Troll("data/images/sprites/madscientist_spritesheet.png", 640, 170));
+//		enemies.add(new Troll("data/images/sprites/madscientist_spritesheet.png", 700, 300));
+	}
+	
+	@Override
+	public int getID() 
+	{
+		return stateID;
+	} 
+
+}

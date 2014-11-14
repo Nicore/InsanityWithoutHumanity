@@ -1,0 +1,287 @@
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/360/TSAT/!svn/ver/324/trunk/data/images/sprites
+END
+vampiresheet.png
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/360/TSAT/!svn/ver/243/trunk/data/images/sprites/vampiresheet.png
+END
+trollsheetblue.png
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/360/TSAT/!svn/ver/175/trunk/data/images/sprites/trollsheetblue.png
+END
+crosshair.png
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/360/TSAT/!svn/ver/255/trunk/data/images/sprites/crosshair.png
+END
+flamethrower.png
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/360/TSAT/!svn/ver/217/trunk/data/images/sprites/flamethrower.png
+END
+hud_dull.png
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/360/TSAT/!svn/ver/236/trunk/data/images/sprites/hud_dull.png
+END
+pickup_fire.png
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/360/TSAT/!svn/ver/255/trunk/data/images/sprites/pickup_fire.png
+END
+madscientist_spritesheet.png
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/360/TSAT/!svn/ver/95/trunk/data/images/sprites/madscientist_spritesheet.png
+END
+robotsheet.png
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/360/TSAT/!svn/ver/271/trunk/data/images/sprites/robotsheet.png
+END
+zombiesheetfire.png
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/360/TSAT/!svn/ver/212/trunk/data/images/sprites/zombiesheetfire.png
+END
+EmptyHealth.png
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/360/TSAT/!svn/ver/117/trunk/data/images/sprites/EmptyHealth.png
+END
+bullet.png
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/360/TSAT/!svn/ver/165/trunk/data/images/sprites/bullet.png
+END
+lightning_weapon.png
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/360/TSAT/!svn/ver/209/trunk/data/images/sprites/lightning_weapon.png
+END
+fire_bullet.png
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/360/TSAT/!svn/ver/217/trunk/data/images/sprites/fire_bullet.png
+END
+fire_weapon.png
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/360/TSAT/!svn/ver/210/trunk/data/images/sprites/fire_weapon.png
+END
+hud_flamethrower.png
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/360/TSAT/!svn/ver/236/trunk/data/images/sprites/hud_flamethrower.png
+END
+hud_shredder.png
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/360/TSAT/!svn/ver/236/trunk/data/images/sprites/hud_shredder.png
+END
+powerup_armor.png
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/360/TSAT/!svn/ver/223/trunk/data/images/sprites/powerup_armor.png
+END
+door_vert.png
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/360/TSAT/!svn/ver/222/trunk/data/images/sprites/door_vert.png
+END
+trollsheetpink.png
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/360/TSAT/!svn/ver/324/trunk/data/images/sprites/trollsheetpink.png
+END
+shredderbullet.png
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/360/TSAT/!svn/ver/230/trunk/data/images/sprites/shredderbullet.png
+END
+shredder_weapon.png
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/360/TSAT/!svn/ver/219/trunk/data/images/sprites/shredder_weapon.png
+END
+lightning_bullet1.png
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/360/TSAT/!svn/ver/258/trunk/data/images/sprites/lightning_bullet1.png
+END
+lightning_bullet2.png
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/360/TSAT/!svn/ver/258/trunk/data/images/sprites/lightning_bullet2.png
+END
+lightning_bullet3.png
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/360/TSAT/!svn/ver/258/trunk/data/images/sprites/lightning_bullet3.png
+END
+lightning_bullets.png
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/360/TSAT/!svn/ver/255/trunk/data/images/sprites/lightning_bullets.png
+END
+PreLaser.png
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/360/TSAT/!svn/ver/167/trunk/data/images/sprites/PreLaser.png
+END
+lightning_bullet4.png
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/360/TSAT/!svn/ver/258/trunk/data/images/sprites/lightning_bullet4.png
+END
+door_horiz.png
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/360/TSAT/!svn/ver/221/trunk/data/images/sprites/door_horiz.png
+END
+zombiesheet.png
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/360/TSAT/!svn/ver/211/trunk/data/images/sprites/zombiesheet.png
+END
+powerup_insanity.png
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/360/TSAT/!svn/ver/220/trunk/data/images/sprites/powerup_insanity.png
+END
+pickup_shred.png
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/360/TSAT/!svn/ver/255/trunk/data/images/sprites/pickup_shred.png
+END
+hud_dark.png
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/360/TSAT/!svn/ver/236/trunk/data/images/sprites/hud_dark.png
+END
+pickup_light.png
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/360/TSAT/!svn/ver/255/trunk/data/images/sprites/pickup_light.png
+END
+hud_lightning.png
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/360/TSAT/!svn/ver/236/trunk/data/images/sprites/hud_lightning.png
+END
+Lightning.png
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/360/TSAT/!svn/ver/217/trunk/data/images/sprites/Lightning.png
+END
+crosshair_small.png
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/360/TSAT/!svn/ver/255/trunk/data/images/sprites/crosshair_small.png
+END
+powerup_grenade.png
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/360/TSAT/!svn/ver/225/trunk/data/images/sprites/powerup_grenade.png
+END
+FullHealth.png
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/360/TSAT/!svn/ver/117/trunk/data/images/sprites/FullHealth.png
+END
+powerup_dmg.png
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/360/TSAT/!svn/ver/224/trunk/data/images/sprites/powerup_dmg.png
+END
+projectilesheet.png
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/360/TSAT/!svn/ver/126/trunk/data/images/sprites/projectilesheet.png
+END
+hud_gun.png
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/360/TSAT/!svn/ver/236/trunk/data/images/sprites/hud_gun.png
+END
+arrow.png
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/360/TSAT/!svn/ver/166/trunk/data/images/sprites/arrow.png
+END
+powerup_heal.png
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/360/TSAT/!svn/ver/226/trunk/data/images/sprites/powerup_heal.png
+END
+basic_weapon.png
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/360/TSAT/!svn/ver/120/trunk/data/images/sprites/basic_weapon.png
+END
+vial.png
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/360/TSAT/!svn/ver/227/trunk/data/images/sprites/vial.png
+END
+trollsheetzombie.png
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/360/TSAT/!svn/ver/174/trunk/data/images/sprites/trollsheetzombie.png
+END
+LaserBeam.png
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/360/TSAT/!svn/ver/167/trunk/data/images/sprites/LaserBeam.png
+END

@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 32
+/360/TSAT/!svn/ver/198/trunk/lib
+END
+openal.dylib
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/360/TSAT/!svn/ver/198/trunk/lib/openal.dylib
+END
+slick.jar
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/360/TSAT/!svn/ver/61/trunk/lib/slick.jar
+END
+OpenAL64.dll
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/360/TSAT/!svn/ver/61/trunk/lib/OpenAL64.dll
+END
+jinput-raw_64.dll
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/360/TSAT/!svn/ver/61/trunk/lib/jinput-raw_64.dll
+END
+lwjgl64.dll
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/360/TSAT/!svn/ver/61/trunk/lib/lwjgl64.dll
+END
+jinput-dx8.dll
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/360/TSAT/!svn/ver/61/trunk/lib/jinput-dx8.dll
+END
+lwjgl.dll
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/360/TSAT/!svn/ver/61/trunk/lib/lwjgl.dll
+END
+jinput-raw.dll
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/360/TSAT/!svn/ver/61/trunk/lib/jinput-raw.dll
+END
+lwjgl.jar
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/360/TSAT/!svn/ver/61/trunk/lib/lwjgl.jar
+END
+liblwjgl.jnilib
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/360/TSAT/!svn/ver/198/trunk/lib/liblwjgl.jnilib
+END
+OpenAL32.dll
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/360/TSAT/!svn/ver/61/trunk/lib/OpenAL32.dll
+END
+jinput-dx8_64.dll
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/360/TSAT/!svn/ver/61/trunk/lib/jinput-dx8_64.dll
+END
+libjinput-osx.jnilib
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/360/TSAT/!svn/ver/198/trunk/lib/libjinput-osx.jnilib
+END

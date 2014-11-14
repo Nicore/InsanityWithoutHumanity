@@ -1,0 +1,296 @@
+package entity;
+
+import insanity.InsanityMap;
+import insanity.MainGameState;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+import org.newdawn.slick.Color;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+//import org.newdawn.slick.SpriteSheet;
+
+public class TrollBoss extends Enemy{
+
+	private float currentHealth = 50;
+	private float startHealth = 50;
+	float shotTime = 1500f;
+	float phaseCounter = 0;
+	boolean invincible = false;
+	boolean phaseOne = true;
+	boolean phaseTwo = false;
+	boolean enemiesSpawned = false;
+	boolean phaseThree = false;
+	double multiplier = 0;
+	
+	private Image fullHealth = new Image("data/images/sprites/FullHealth.png");
+	private Image emptyHealth = new Image("data/images/sprites/EmptyHealth.png");
+	
+	public TrollBoss(String spriteSheet, float x, float y, double multiplier)
+			throws SlickException {
+		super(spriteSheet, x, y);
+		//sheet = new SpriteSheet(spriteSheet, 96, 144);
+		currentHealth = (float)(150 * multiplier);
+		startHealth =  (float)(150 * multiplier);
+		this.multiplier = multiplier;
+		// TODO Auto-generated constructor stub
+	}
+	
+	public void update(GameContainer gc, float deltaTime, float playerX, float playerY, ArrayList<Enemy> enemies, InsanityMap map,
+			ArrayList<Bullet> bullets, Sounds sounds) throws SlickException{
+		if(!invincible){
+			super.update(gc, deltaTime, playerX, playerY);
+		}
+		if(100 * (currentHealth/startHealth) <= 20){
+			phaseThree = true;
+			phaseOne = false;
+			phaseTwo = false;
+			enemiesSpawned = true;
+			invincible = false;
+		}
+		if(phaseCounter >= 17000 && !phaseThree){
+			phaseCounter = 0;
+			if(phaseOne){
+				phaseOne = false;
+				phaseTwo = true;
+				enemiesSpawned = false;
+			}
+			else if(phaseTwo){
+				phaseTwo = false;
+				phaseOne = true;
+				invincible = false;
+			}
+		}
+		else{
+			phaseCounter += deltaTime * 1000;
+		}
+		if(phaseOne){
+			phaseOne(deltaTime, map, bullets, sounds, playerX, playerY, enemies);
+		}
+		if(phaseTwo){
+			invincible = true;
+			phaseTwo(deltaTime, enemies, sounds, map);
+		}
+		if(phaseThree){
+			//phaseTwo(deltaTime, enemies, sounds, map);
+			phaseOne(deltaTime, map, bullets, sounds, playerX, playerY, enemies);
+			phaseOne(deltaTime, map, bullets, sounds, playerX, playerY, enemies);
+			phaseOne(deltaTime, map, bullets, sounds, playerX, playerY, enemies);
+		}
+	}
+	
+
+	
+	public void phaseOne(float deltaTime, InsanityMap playerRoom, ArrayList<Bullet> bullets, Sounds sounds, float playerX, float playerY, ArrayList<Enemy> enemies) throws SlickException{
+		circleArrows(deltaTime, bullets, sounds);
+		moveCloser(playerX, playerY, deltaTime, enemies, playerRoom);
+		fireFireBall(playerX, playerY, bullets, sounds);
+		
+	}
+	
+	public void circleArrows(float deltaTime, ArrayList<Bullet> bullets, Sounds sounds) throws SlickException{
+
+		if(shotTime < 0){
+			shotTime = 1500f;
+			for(double i = 0 ; i <= Math.PI; i+= Math.PI / 8.0){
+				bullets.add(new Bullet("data/images/sprites/arrow.png" ,posX, posY,(float) i, "Boss"));
+			}
+			for(double i = 0 ; i >= -Math.PI; i-= Math.PI / 8.0){
+				bullets.add(new Bullet("data/images/sprites/arrow.png" ,posX, posY,(float) i, "Boss"));
+			}
+		}
+		else{
+			shotTime -= deltaTime*1000;
+		}
+	}
+	
+	public void fireFireBall(float playerX, float playerY, ArrayList<Bullet> bullets, Sounds sounds) throws SlickException{
+		if(shotTime <= 10){
+			float projection = (float) Math.atan2((playerY - posY),(playerX - posX));
+			bullets.add(new Bullet("data/images/sprites/fire_bullet.png" ,posX, posY, projection, "BossFire"));
+		}
+	}
+	
+	public void phaseTwo(float deltaTime, ArrayList<Enemy> enemies, Sounds sounds, InsanityMap playerRoom) throws SlickException{
+		if(enemies.size() <= 1 && enemiesSpawned){
+			phaseCounter = 17000;
+		}
+		if(!enemiesSpawned){								
+			enemiesSpawned = true;
+			Random generator = new Random();
+			for(int i = 1; i < 10; i++){
+
+				int enemyX = generator.nextInt(MainGameState.SCREENWIDTH-64)+32;
+				int enemyY = generator.nextInt(MainGameState.SCREENHEIGHT-64)+32;
+				int enemyType = generator.nextInt(4);
+				if(enemyType == 0){
+					enemies.add(new ZombieTroll("data/images/sprites/trollsheetzombie.png", enemyX, enemyY, multiplier));
+				}
+				else if(enemyType == 1){
+					enemies.add(new Robot("data/images/sprites/robotsheet.png", enemyX, enemyY, multiplier));
+				}
+				else if(enemyType == 2){
+					enemies.add(new Vampire("data/images/sprites/vampiresheet.png", enemyX, enemyY, multiplier));
+				}
+				else if(enemyType == 3){
+					enemies.add(new FireZombie("data/images/sprites/zombiesheetfire.png", enemyX, enemyY, multiplier));
+				}
+
+				// Check enemy didn't spawn on environment
+				if(!Collision.checkEnviroment(enemies.get(i), 12, playerRoom, deltaTime)){
+					enemies.remove(i);
+					i--;
+				} else if(!Collision.checkEnviroment(enemies.get(i), 3, playerRoom, deltaTime)){
+					enemies.remove(i);
+					i--;
+				} else if(!Collision.checkEnviroment(enemies.get(i), 6, playerRoom, deltaTime)){
+					enemies.remove(i);
+					i--;
+				} else if(!Collision.checkEnviroment(enemies.get(i), 9, playerRoom, deltaTime)){
+					enemies.remove(i);
+					i--;
+				}
+
+				// Check enemy didn't spawn on other enemy
+				for(int j = 1; j < enemies.size()-2; j++)
+				{
+					if(enemies.get(i) != enemies.get(j)){
+						if(!Collision.check(enemies.get(j), enemies.get(i), 12)){
+							enemies.remove(i);
+							i--;
+						} else if(!Collision.check(enemies.get(j), enemies.get(i), 3)){
+							enemies.remove(i);
+							i--;
+						} else if(!Collision.check(enemies.get(j), enemies.get(i), 6)){
+							enemies.remove(i);
+							i--;
+						} else if(!Collision.check(enemies.get(j), enemies.get(i), 9)){
+							enemies.remove(i);
+							i--;
+						}
+					}
+				}
+
+			}
+		}
+	}
+	
+	public void moveCloser(float playerX, float playerY, float deltaTime, ArrayList<Enemy> enemies, InsanityMap map){
+		boolean goUp = true;
+		boolean goDown = true;
+		boolean goLeft = true;
+		boolean goRight = true;
+		
+		
+		
+		if(posX < playerX-100){
+			if(!Collision.checkEnviroment(this, 3, map, deltaTime)){
+				goUp = false;
+			}
+			for(Enemy e: enemies){
+				if(e != this){
+					if(Collision.check(this, e, 3) && goUp){
+						
+					}
+					else {
+						goUp = false;
+					}
+				}
+			}
+			if(goUp){
+				posX += 50 * deltaTime;
+			}
+		}
+		/*else */if(posY < playerY-100){
+			if(!Collision.checkEnviroment(this, 6, map, deltaTime)){
+				goDown = false;
+			}
+			for(Enemy e: enemies){
+				if(e != this){
+					if(Collision.check(this, e, 6) && goDown){
+						
+					}
+					else {
+						goDown = false;
+					}
+				}
+			}
+			if(goDown){
+				posY += 50 * deltaTime;
+			}
+		}
+		/*else */if(posX > playerX+100){
+			if(!Collision.checkEnviroment(this, 9, map, deltaTime)){
+				goLeft = false;
+			}
+			for(Enemy e: enemies){
+				if(e != this){
+					if(Collision.check(this, e, 9)&& goLeft){
+						
+					}
+					else {
+						goLeft = false;
+					}
+				}
+			}
+			if(goLeft){
+				posX -= 50 * deltaTime;
+			}
+		}
+		/*else */if(posY > playerY+100){
+			if(!Collision.checkEnviroment(this, 12, map, deltaTime)){
+				goRight = false;
+			}
+			for(Enemy e: enemies){
+				if(e != this){
+					if(Collision.check(this, e, 12)&& goRight){
+						
+					}
+					else {
+						goRight = false;
+					}
+				}
+			}
+			if(goRight){
+				posY -= 50 * deltaTime;
+			}
+			
+		}
+	}
+	
+	public void render(){
+		emptyHealth.draw(posX-32, posY-45, 100, 13);
+		fullHealth.draw(posX-32, posY-45, (int)(100*(currentHealth/startHealth)), 13);
+		if(invincible){
+			sprites.getCurrentFrame().drawFlash(posX - 16, posY -32, sprites.getCurrentFrame().getWidth(), sprites.getCurrentFrame().getHeight(), new Color(100,100, 100, 170));
+		}
+		else {
+			super.render();
+		}
+	}
+
+	
+	public void wasHit(Bullet hitBy, Player player) 
+	{
+		//System.out.println(currentHealth);
+		if(!invincible){
+			isHit = true;
+			hitCounterReset();
+			attacking = true;
+			// Change to weapon damage when weapons are implemented i.e. bullet.damage;
+			if(hitBy instanceof ShredderBullet){
+				--currentHealth;
+			}
+			--currentHealth;
+			player.addScore(1);
+			if (currentHealth <= 0)
+			{
+				currentHealth = 0;
+				isDead = true;
+				player.addScore(100);
+			}
+		}
+	}
+}

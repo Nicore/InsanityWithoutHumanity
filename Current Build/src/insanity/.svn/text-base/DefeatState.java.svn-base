@@ -1,0 +1,245 @@
+package insanity;
+
+import org.newdawn.slick.AngelCodeFont;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.gui.TextField;
+import org.newdawn.slick.state.BasicGameState;
+import org.newdawn.slick.state.StateBasedGame;
+
+import entity.Sounds;
+
+public class DefeatState extends BasicGameState
+{
+	int stateID = -1;
+	
+	Image background = null;
+	Image title = null;
+	Image menu = null;
+	Image exit = null;
+	Image submit = null;
+	
+	Image retry = null;
+
+	float menuScale = 1;
+	float exitScale = 1;
+	float retryScale = 1;
+	float submitScale = 1;
+	
+	float deltaTime;
+	float cooldown = 1;
+	
+	boolean submitted = false;
+	boolean musicPlayed = false;
+	Sounds sounds;
+
+	
+	private static int optionX = 500;
+	private static int optionY = 200;
+	private static int subX = 100;
+	private static int subY = 200;
+	
+	private AngelCodeFont font; 
+    private TextField playerName;
+    private String error = null;
+	
+    boolean hovered = false;
+	public DefeatState(int stateID) 
+	{ 
+		this.stateID = stateID;
+	} 
+	
+	@Override
+	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException 
+	{
+		// TODO Auto-generated method stub
+		title = new Image("data/images/menus/defeat.png");
+		menu = new Image("data/images/menus/mainmenutext.png");
+		exit = new Image("data/images/menus/exittext.png");
+		retry = new Image("data/images/menus/retrytext.png");
+		submit = new Image("data/images/menus/submittext.png");
+		
+		font = new AngelCodeFont("data/fonts/Impact2.fnt", "data/fonts/Impact2.png");
+		this.playerName = new TextField(gc,this.font,100,100,300,30);
+        this.playerName.setBackgroundColor(Color.white);
+        this.playerName.setBorderColor(Color.red);
+        this.playerName.setTextColor(Color.red);
+        this.playerName.setMaxLength(25);
+        sounds = new Sounds("test");
+
+	}
+	
+	float scaleStep = 0.001f;
+	@Override
+	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException 
+	{
+		if(!musicPlayed){
+			sounds.playMusic("defeat");
+			musicPlayed = true;
+		}
+		deltaTime = delta / 1000f;
+		if (cooldown > 0) {
+			cooldown -= deltaTime;
+		}
+		Input input = gc.getInput();
+		
+		int mouseX = input.getMouseX();
+		int mouseY = input.getMouseY();
+		
+		if(input.isKeyDown(Input.KEY_ESCAPE))
+		{
+			gc.exit();
+		}
+		
+		boolean inMenu = false;
+		boolean inExit = false;
+		boolean inRetry = false;
+		boolean inSubmit = false;
+
+		//decide whether the mouse is over an option
+		if ( (mouseX >= optionX && mouseX <= optionX + retry.getWidth()) &&
+				 (mouseY >= optionY && mouseY <= optionY + retry.getHeight()) ) {
+			inRetry = true;
+		} 
+		if ( (mouseX >= optionX && mouseX <= optionX + menu.getWidth()) &&
+				 (mouseY >= optionY+280 && mouseY <= optionY+280 + menu.getHeight()) ) {
+			inMenu = true;
+		} 
+		if (( mouseX >= optionX && mouseX <= optionX + exit.getWidth()) &&
+				(mouseY >= optionY+420 && mouseY <= optionY + 420 +exit.getHeight())) {
+			inExit = true;
+		}
+		if ((mouseX >= subX && mouseX <= subX + submit.getWidth()) &&
+				(mouseY >= subY && mouseY <= subY + submit.getHeight())) {			
+			inSubmit = true;
+		}
+		
+		//deal with mouseovers and clicks
+		if (cooldown <= 0) { //this is here so you dont screw up when dying and going to the menu
+						
+			if(inMenu) {
+				if(!hovered){
+					sounds.menuHover();
+				}
+				if(menuScale < 1.05f){
+					menuScale += scaleStep * delta;
+				} 
+				if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON)){
+					cooldown = 1;
+					menuScale = 1;
+					submitted = false;
+					error = null;
+					submitScale = 1;
+					musicPlayed = false;
+					sounds.stopMusic();
+					sounds.menuSelect();
+					sbg.enterState(MainGameState.MAINMENUSTATE);
+				}
+			} else {
+				hovered = false;
+				if(menuScale > 1.0f){
+					menuScale -= scaleStep * delta;				
+				}
+				
+			}
+			if(inRetry) {
+				if(!hovered){
+					sounds.menuHover();
+				}
+				if(retryScale < 1.05f){
+					retryScale += scaleStep * delta;
+				} 
+				if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON)){
+					gc.setMouseCursor("data/images/sprites/crosshair_small.png",0,0); 
+					cooldown = 1;
+					retryScale = 1;
+					submitted = false;
+					error = null;
+					submitScale = 1;
+					musicPlayed = false;
+					sounds.stopMusic();
+					sounds.menuSelect();
+					sbg.enterState(MainGameState.GAMEPLAYSTATE);
+				}
+			} else {
+				hovered = false;
+				if(retryScale > 1.0f){
+					retryScale -= scaleStep * delta;				
+				}
+				
+			}
+		
+			if(inExit) {
+				if(!hovered){
+					sounds.menuHover();
+				}
+				if(exitScale < 1.05f){
+					exitScale += scaleStep * delta;
+				} 
+				if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON)){
+					gc.exit();
+				}
+			} else {
+				hovered = false;
+				if(exitScale > 1.0f){
+					exitScale -= scaleStep * delta;				
+				}
+				
+			}
+			if(inSubmit) {
+				if(!hovered){
+					sounds.menuHover();
+				}
+				if(submitScale < 1.05f) {
+					submitScale += scaleStep * delta;
+				}
+				if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+					if(!submitted){
+						if(playerName.getText().replaceAll("\\<.*?\\>", "").equals("")){
+							error = "Error: no name entered.";	
+						} else {
+							error = null;
+							Highscores hsm = new Highscores();
+							error = hsm.submitScore(playerName.getText().replaceAll("\\<.*?\\>", ""), GameplayState.score);
+							submitted = true;
+						}
+					}
+				}
+			} else {
+				hovered = false;
+				if(submitScale > 1.0f) {
+					submitScale -= scaleStep * delta;
+				}
+			}
+		}
+	}
+	
+	@Override
+	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException 
+	{
+		// TODO Auto-generated method stub
+		title.draw(1000- title.getWidth(),20);
+		menu.draw(optionX, optionY+280, menuScale);
+		exit.draw(optionX, optionY+420, exitScale);
+		retry.draw(optionX, optionY, retryScale);
+		if (submitted == false) {
+			playerName.render(gc, g);
+			submit.draw(subX, subY, submitScale);
+		} 
+		font.drawString(120, 130, "Score reached: "+ GameplayState.score, Color.red);
+		if(error != null){
+			font.drawString(120, 160, error, Color.red);
+		}
+	}
+	
+	@Override
+	public int getID() 
+	{
+		return stateID;
+	}
+
+}

@@ -1,0 +1,186 @@
+package insanity;
+
+import org.newdawn.slick.AngelCodeFont;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.BasicGameState;
+import org.newdawn.slick.state.StateBasedGame;
+
+import entity.Sounds;
+
+public class VictoryState extends BasicGameState
+{
+	int stateID = -1;
+	
+	Image background = null;
+	Image title = null;
+	Image menu = null;
+	Image exit = null;
+	
+	Image contin = null;
+
+	float menuScale = 1;
+	float exitScale = 1;
+	float continScale = 1;
+	
+	float deltaTime;
+	float cooldown = 1;
+	
+	Sounds sounds;
+	boolean musicPlayed = false;
+	boolean hovered = false;
+	
+	private AngelCodeFont font; 
+
+	private static int optionX = 500;
+	private static int optionY = 200;
+	
+	public VictoryState(int stateID) 
+	{ 
+		this.stateID = stateID;
+	} 
+	
+	@Override
+	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException 
+	{
+		// TODO Auto-generated method stub
+		title = new Image("data/images/menus/victory.png");
+		menu = new Image("data/images/menus/mainmenutext.png");
+		exit = new Image("data/images/menus/exittext.png");
+		contin = new Image("data/images/menus/continuetext.png");
+		font = new AngelCodeFont("data/fonts/Impact2.fnt", "data/fonts/Impact2.png");
+		sounds = new Sounds("test");
+
+	}
+	
+	float scaleStep = 0.001f;
+	@Override
+	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException 
+	{
+		deltaTime = delta / 1000f;
+		if(!musicPlayed){
+			sounds.playMusic("victory");
+			musicPlayed = true;
+		}
+		
+		if (cooldown > 0) {
+			cooldown -= deltaTime;
+		}
+		Input input = gc.getInput();
+		
+		int mouseX = input.getMouseX();
+		int mouseY = input.getMouseY();
+		
+		if(input.isKeyDown(Input.KEY_ESCAPE))
+		{
+			gc.exit();
+		}
+		
+		boolean inMenu = false;
+		boolean inExit = false;
+		boolean inContin = false;
+
+		//decide whether the mouse is over an option
+		if ( (mouseX >= optionX && mouseX <= optionX + contin.getWidth()) &&
+				 (mouseY >= optionY && mouseY <= optionY + contin.getHeight()) ) {
+			inContin = true;
+		} 
+		if ( (mouseX >= optionX && mouseX <= optionX + menu.getWidth()) &&
+				 (mouseY >= optionY+280 && mouseY <= optionY+280 + menu.getHeight()) ) {
+			inMenu = true;
+		} 
+		if (( mouseX >= optionX && mouseX <= optionX + exit.getWidth()) &&
+				(mouseY >= optionY+420 && mouseY <= optionY + 420 +exit.getHeight())) {
+			inExit = true;
+		}
+		
+		//deal with mouseovers and clicks
+		if (cooldown <= 0) {// cooldown
+			if(inMenu) {
+				if(!hovered){
+					sounds.menuHover();
+				}
+				if(menuScale < 1.05f){
+					menuScale += scaleStep * delta;
+				} 
+				if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON)){	
+					cooldown = 1;
+					menuScale = 1;
+					sounds.stopMusic();
+					musicPlayed = false;
+					sounds.menuSelect();
+					sbg.enterState(MainGameState.MAINMENUSTATE);
+				}
+			} else {
+				hovered = false;
+				if(menuScale > 1.0f){
+					menuScale -= scaleStep * delta;				
+				}
+				
+			}
+			if(inContin) {
+				if(!hovered){
+					sounds.menuHover();
+				}
+				if(continScale < 1.05f){
+					continScale += scaleStep * delta;
+				} 
+				if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON)){	
+					gc.setMouseCursor("data/images/sprites/crosshair_small.png",0,0);
+					cooldown = 1;
+					continScale = 1;
+					sounds.stopMusic();
+					musicPlayed = false;
+					sounds.menuSelect();
+					sbg.enterState(MainGameState.GAMEPLAYSTATE);
+				}
+			} else {
+				hovered = false;
+				if(continScale > 1.0f){
+					continScale -= scaleStep * delta;				
+				}
+				
+			}
+		
+			if(inExit) {
+				if(!hovered){
+					sounds.menuHover();
+				}
+				if(exitScale < 1.05f){
+					exitScale += scaleStep * delta;
+				} 
+				if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON)){
+					gc.exit();
+				}
+			} else {
+				hovered = false;
+				if(exitScale > 1.0f){
+					exitScale -= scaleStep * delta;				
+				}
+				
+			}
+		}
+	}
+	
+	@Override
+	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException 
+	{
+		// TODO Auto-generated method stub
+		title.draw(1000- title.getWidth(),20);
+		menu.draw(optionX, optionY+280, menuScale);
+		exit.draw(optionX, optionY+420, exitScale);
+		contin.draw(optionX, optionY, continScale);
+		font.drawString(110, 130, "Current score: "+ GameplayState.score, Color.red);
+	}
+	
+	@Override
+	public int getID() 
+	{
+		return stateID;
+	}
+
+}
